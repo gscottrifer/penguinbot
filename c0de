@@ -32,7 +32,7 @@ const float SERVO_MAX = 2047.0;
 const float TOP_SPEED = 1023.0;//100;
 //Boolean Constants
 //This dialect of C does not have boolean data types, so we're faking it
-//according to convention: true is non-zero, usually 1, and false is 0.
+//according to convention: true is non-zero, 	sually 1, and false is 0.
 const int TRUE = 1;
 const int FALSE = 0;
 //*************************************************** Function Definitions ****************************************************//
@@ -41,7 +41,11 @@ int main()
 int i;
 	enable_servos();
 		
-	while(1){
+	while(1){ 
+	if(check_escape_conditions()){
+			escape();
+		}
+	
 
 
 
