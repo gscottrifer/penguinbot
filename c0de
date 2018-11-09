@@ -36,3 +36,20 @@ const float TOP_SPEED = 1023.0;//100;
 const int TRUE = 1;
 const int FALSE = 0;
 //*************************************************** Function Definitions ****************************************************//
+int main() 
+{
+int i;
+	enable_servos();
+		
+	while(1){
+
+
+
+
+
+);}
+
+	}
+	
+
+
