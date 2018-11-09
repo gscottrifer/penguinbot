@@ -1,1 +1,38 @@
 //Behavior primitive functions
+void vision();
+int check_escape_conditions();
+int check_escape_back_conditions();
+int check_avoid_conditions();
+int check_approach_conditions();
+void escape();
+void escape_back();
+void avoid();
+void approach();
+void straight_cruise();
+void stop();
+//Motor Control Function
+void drive(float left, float right, float delay_seconds);
+
+//*************************************************** Global Constant Declarations ****************************************************//
+const int FRONT_BUMP = 0;
+const int BACK_BUMP = 1;//15;
+const int LEFT_PHOTO = 2;
+const int RIGHT_PHOTO = 3;
+const int LEFT_IR = 4;
+const int RIGHT_IR = 5;
+const int LEFT_MOTOR = 0;
+const int RIGHT_MOTOR = 3;
+
+const int YELLOW_CH = 0;
+const int RED_CH = 1;
+const int BLUE_CH = 2;
+const int GREEN_CH = 3;
+
+const float SERVO_MAX = 2047.0;
+const float TOP_SPEED = 1023.0;//100;
+//Boolean Constants
+//This dialect of C does not have boolean data types, so we're faking it
+//according to convention: true is non-zero, usually 1, and false is 0.
+const int TRUE = 1;
+const int FALSE = 0;
+//*************************************************** Function Definitions ****************************************************//
