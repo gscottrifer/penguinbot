@@ -59,10 +59,6 @@ int i;
 		avoid();
 	}
 	
-	else if(check_approach_conditions()){
-	approach();
-	}
-	
 	else{straight_cruise();}
 	
 	}
