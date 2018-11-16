@@ -5,8 +5,10 @@
 int check_escape_conditions();
 int check_avoid_conditions();
 int check_approach_conditions();
-int check_seekcolor_conditions();
-void seekcolor();
+int check_seekcolor_blue_conditions();
+int check_seekcolor_pink_conditions();
+void seekcolor_blue();
+void seekcolor_pink();
 void escape();
 void avoid();
 void approach();
@@ -27,10 +29,12 @@ const int RIGHT_IR = 5;
 const int LEFT_MOTOR = 0;
 const int RIGHT_MOTOR = 3;
 
-const int YELLOW_CH = 0;
-const int RED_CH = 1;
-const int BLUE_CH = 2;
-const int GREEN_CH = 3;
+const int BLUE_CH = 0;
+const int PINK_CH = 1;
+const int GREEN_CH = 2;
+const int YELLOW_CH = 3;
+
+
 
 const float SERVO_MAX = 2047.0;
 const float TOP_SPEED = 1023.0;//100;
@@ -47,11 +51,14 @@ int i;
 		
 	while(1){ 
 	if(check_escape_conditions()){
-			
 			escape();
 		}
-	else if(check_seekcolor_conditions()){
-				seekcolor();
+	else if(check_seekcolor_blue_conditions()){
+				seekcolor_blue();
+				
+		}
+	else if(check_seekcolor_pink_conditions()){
+				seekcolor_pink();
 				
 		}
 	
@@ -99,7 +106,15 @@ void escape(){
 }
 
 /******************************************************/
-int check_seekcolorconditions(){
+int check_seekcolor_blue_conditions(){
+	camera_update();
+	if (get_object_count(0) > 0){
+	printf("I see blue");
+	return TRUE;
+	}else{
+		return FALSE;
+		}
+	
 }
 /******************************************************/
 void seekcolor(){
