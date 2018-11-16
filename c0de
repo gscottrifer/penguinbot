@@ -117,6 +117,17 @@ int check_seekcolor_blue_conditions(){
 	
 }
 /******************************************************/
+int check_seekcolor_pink_conditions(){
+	camera_update();
+	if (get_object_count(1) > 0){
+	printf("I see pink");
+	return TRUE;
+	}else{
+		return FALSE;
+		}
+	
+}
+/******************************************************/
 void seekcolor(){
 }
 /******************************************************/
