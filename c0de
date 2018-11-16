@@ -1,3 +1,6 @@
+
+#include "sensors.h"
+
 //Behavior primitive functions
 void vision();
 int check_escape_conditions();
@@ -45,6 +48,16 @@ int i;
 	if(check_escape_conditions()){
 			escape();
 		}
+	else if(check_avoid_conditions()){
+		printf("avoid\n");
+		avoid();
+	}
+	
+	else{straight_cruise();}
+	
+	}
+
+
 	
 
 
