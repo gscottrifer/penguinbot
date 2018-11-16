@@ -4,14 +4,14 @@
 //Behavior primitive functions
 int check_escape_conditions();
 int check_avoid_conditions();
-int check_approach_conditions();
+//int check_approach_conditions();
 int check_seekcolor_blue_conditions();
 int check_seekcolor_pink_conditions();
 void seekcolor_blue();
 void seekcolor_pink();
 void escape();
 void avoid();
-void approach();
+//void approach();
 void straight_cruise();
 void pick_up();
 void return_nest();
@@ -40,12 +40,12 @@ const float SERVO_MAX = 2047.0;
 const float TOP_SPEED = 1023.0;//100;
 //Boolean Constants
 //This dialect of C does not have boolean data types, so we're faking it
-//according to convention: true is non-zero, 	sually 1, and false is 0.
-const int TRUE = 1;
-const int FALSE = 0;
+//according to convention: true is non-zero, 	sually 1, and false is 0. 
+int const true = 1;
+int const false = 0;
 //*************************************************** Function Definitions ****************************************************//
-int main() 
-{
+int main() {
+	
 int i;
 	enable_servos();
 		
@@ -54,11 +54,11 @@ int i;
 			escape();
 		}
 	else if(check_seekcolor_blue_conditions()){
-				seekcolor_blue();
+				//seekcolor_blue();
 				
 		}
 	else if(check_seekcolor_pink_conditions()){
-				seekcolor_pink();
+				//seekcolor_pink();
 				
 		}
 	
@@ -67,7 +67,7 @@ int i;
 		avoid();
 	}
 	
-	else{straight_cruise();}
+	//else{straight_cruise();}
 	
 	}
 //printf-Prints behavior the robot is currently executing
@@ -80,9 +80,9 @@ int check_escape_conditions(){
 	int front_bump_value = analog10(FRONT_BUMP);
 	
 	if(front_bump_value >= bump_threshold && front_bump_value <= bump_max){
-		return TRUE;
+		return true;
 	}else{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -107,23 +107,25 @@ void escape(){
 
 /******************************************************/
 int check_seekcolor_blue_conditions(){
+	camera_open();
 	camera_update();
 	if (get_object_count(0) > 0){
 	printf("I see blue");
-	return TRUE;
+	return true;
 	}else{
-		return FALSE;
+		return false;
 		}
 	
 }
 /******************************************************/
 int check_seekcolor_pink_conditions(){
+	camera_open();
 	camera_update();
 	if (get_object_count(1) > 0){
 	printf("I see pink");
-	return TRUE;
+	return true;
 	}else{
-		return FALSE;
+		return false;
 		}
 	
 }
@@ -140,9 +142,9 @@ int check_avoid_conditions(){
 	right_ir_value = analog_et(RIGHT_IR);
 	
 	if(left_ir_value > avoid_threshold || right_ir_value > avoid_threshold){
-		return TRUE;
+		return true;
 	}else{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -196,10 +198,3 @@ void drive(float left, float right, float delay_seconds){
 	//disable_servos();
 }
 /******************************************************/
-
-
-
-
-
-
-
