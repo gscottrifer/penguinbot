@@ -2,13 +2,12 @@
 #include "sensors.h"
 
 //Behavior primitive functions
-void vision();
 int check_escape_conditions();
-int check_escape_back_conditions();
 int check_avoid_conditions();
 int check_approach_conditions();
+int check_seekcolor_conditions();
+void seekcolor();
 void escape();
-void escape_back();
 void avoid();
 void approach();
 void straight_cruise();
