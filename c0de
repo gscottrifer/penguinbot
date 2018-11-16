@@ -46,11 +46,21 @@ int i;
 		
 	while(1){ 
 	if(check_escape_conditions()){
+			
 			escape();
 		}
+	else if(check_seekcolor_conditions()){
+				seekcolor();
+				
+		}
+	
 	else if(check_avoid_conditions()){
 		printf("avoid\n");
 		avoid();
+	}
+	
+	else if(check_approach_conditions()){
+	approach();
 	}
 	
 	else{straight_cruise();}
