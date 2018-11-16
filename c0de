@@ -11,6 +11,8 @@ void escape();
 void avoid();
 void approach();
 void straight_cruise();
+void pick_up();
+void return_nest();
 void stop();
 //Motor Control Function
 void drive(float left, float right, float delay_seconds);
@@ -118,6 +120,12 @@ int check_avoid_conditions(){
 	}
 }
 
+/******************************************************/
+void pick_up(){
+}
+/******************************************************/
+void return_nest(){
+}
 /******************************************************/
 void avoid(){
 	int left_ir_value;
