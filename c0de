@@ -56,7 +56,7 @@ int i;
 	else{straight_cruise();}
 	
 	}
-
+//printf-Prints behavior the robot is currently executing
 
 	
 
