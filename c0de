@@ -62,16 +62,87 @@ int i;
 	
 	}
 //printf-Prints behavior the robot is currently executing
-
+return 0;
+}
+/******************************************************/
+int check_escape_conditions(){
+	int bump_threshold = 0;
+	int bump_max = 400;
+	int front_bump_value = analog10(FRONT_BUMP);
 	
+	if(front_bump_value >= bump_threshold && front_bump_value <= bump_max){
+		return TRUE;
+	}else{
+		return FALSE;
+	}
+}
 
+/******************************************************/
+void escape(){
+	int bump_threshold = 250;
+	int bump_max = 400;
+	int front_bump_value = analog10(FRONT_BUMP);
+	//printf("EscapeFrontBump()\n");
+	if(front_bump_value < bump_threshold){
+		//drive(-0.25, 0.75, 0.50);
+		drive(-0.0, -0.90, 0.50);
+		//printf("drive(-0.25, -0.75, 1.5);\n");
+	}
+	else if(front_bump_value >= bump_threshold && front_bump_value <= bump_max){
+		//drive(0.75, -0.25, 0.50);
+		drive(-0.90, -0.0, 0.50);
+		//printf("drive(-0.75, -0.25, 1.5);\n");
+	}
 
+}
 
+/******************************************************/
+/******************************************************/
+int check_seekcolorconditions(){
+}
+/******************************************************/
 
+int check_avoid_conditions(){
+	int left_ir_value;
+	int right_ir_value;
+	
+	left_ir_value = analog_et(LEFT_IR);
+	right_ir_value = analog_et(RIGHT_IR);
+	
+	if(left_ir_value > avoid_threshold || right_ir_value > avoid_threshold){
+		return TRUE;
+	}else{
+		return FALSE;
+	}
+}
 
-);}
-
+/******************************************************/
+void avoid(){
+	int left_ir_value;
+	int right_ir_value;
+	
+	left_ir_value = analog_et(LEFT_IR);
+	right_ir_value = analog_et(RIGHT_IR);
+	
+	if(left_ir_value > avoid_threshold){
+		drive(0.5, -0.5, 0.1);
 	}
 	
+	else if(right_ir_value > avoid_threshold){
+		drive(-0.5, 0.5, 0.1);
+	}
+}
+
+/******************************************************/
+void straight_cruise(){
+	//drive(1.0, 1.0, 0.5);
+	drive(0.40, 0.40, 0.5);
+}
+/******************************************************/
+
+
+
+
+
 
 
