@@ -1,4 +1,3 @@
-
 #include "sensors.h"
 
 //Behavior primitive functions
@@ -48,17 +47,24 @@ int main() {
 	
 int i;
 	enable_servos();
+	camera_open();
+	
 		
 	while(1){ 
 	if(check_escape_conditions()){
 			escape();
 		}
-	else if(check_seekcolor_blue_conditions()){
-				//seekcolor_blue();
+	else if(
+		camera_update();
+		check_seekcolor_blue_conditions()){
+				seekcolor_blue();
+			
 				
 		}
-	else if(check_seekcolor_pink_conditions()){
-				//seekcolor_pink();
+	else if
+		camera_update();
+	(check_seekcolor_pink_conditions()){
+				seekcolor_pink();
 				
 		}
 	
@@ -71,6 +77,7 @@ int i;
 	
 	}
 //printf-Prints behavior the robot is currently executing
+camera_close();
 return 0;
 }
 /******************************************************/
@@ -107,26 +114,30 @@ void escape(){
 
 /******************************************************/
 int check_seekcolor_blue_conditions(){
-	camera_open();
+	
 	camera_update();
 	if (get_object_count(0) > 0){
 	printf("I see blue");
 	return true;
 	}else{
-		return false;
+	printf("I don't see blue")
+	return false;
 		}
+
 	
 }
 /******************************************************/
 int check_seekcolor_pink_conditions(){
-	camera_open();
+	
 	camera_update();
 	if (get_object_count(1) > 0){
 	printf("I see pink");
 	return true;
 	}else{
+		printf("I don't see pink")
 		return false;
 		}
+
 	
 }
 /******************************************************/
