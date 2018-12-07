@@ -10,6 +10,7 @@ void seekcolor_blue();
 void seekcolor_pink();
 void escape();
 void avoid();
+void check_area_blue();
 //void approach();
 void straight_cruise();
 void pick_up();
@@ -60,7 +61,8 @@ int i;
 			}
 		else if(check_seekcolor_blue_conditions()){
 					seekcolor_blue();
-					pick_up();
+					check_area_blue();
+					
 					
 			}
 		else if(check_seekcolor_pink_conditions()){
@@ -139,7 +141,8 @@ int check_seekcolor_pink_conditions(){
 }
 /******************************************************/
 void seekcolor_blue(){
-
+	
+drive(0.0, 0.0, 0.25);
 if(get_object_center(0,0).x<65) {// if object is on left...
  drive(-0.5, 0.5, 0.1);// arc left
 	printf("Turning Left\n");
@@ -155,6 +158,18 @@ else drive(-0.40, -0.40, 0.5);
 }
 
 /******************************************************/
+void check_area_blue(){
+	if(get_object_area(0,0)>=400||get_object_area(0,0)<=500) {
+		drive(0.0, 0.0, 0.25);
+		printf("In position\n");
+		pick_up();
+	}
+	else if(get_object_area(0,0)!=480) {
+		printf("Not in position\n");
+		seekcolor_blue();
+	}
+		
+}
 /******************************************************/
 void seekcolor_pink(){
 	//camera_open();
@@ -189,6 +204,7 @@ int check_avoid_conditions(){
 
 /******************************************************/
 void pick_up(){
+	printf("Picking Up\n");
 	
 	
 	drive(0.0, 0.0, 0.5);
