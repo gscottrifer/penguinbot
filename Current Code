@@ -27,6 +27,8 @@ const int LEFT_IR = 4;
 const int RIGHT_IR = 5;
 const int LEFT_MOTOR = 0;
 const int RIGHT_MOTOR = 3;
+const int GRIPPER_MOTOR = 1;
+
 
 const int BLUE_CH = 0;
 const int PINK_CH = 1;
@@ -47,28 +49,34 @@ int main() {
 	
 int i;
 	enable_servos();
+	camera_open();
+	msleep(750);
 	
 		
 	while(1){ 
-	if(check_escape_conditions()){
-			escape();
+		camera_update();
+		if(check_escape_conditions()){
+				escape();
+			}
+		else if(check_seekcolor_blue_conditions()){
+					seekcolor_blue();
+					pick_up();
+					
+			}
+		else if(check_seekcolor_pink_conditions()){
+					seekcolor_pink();
+					pick_up();
+					
+			}
+		
+		else if(check_avoid_conditions()){
+			printf("avoid\n");
+			avoid();
 		}
-	else if(check_seekcolor_blue_conditions()){
-				//seekcolor_blue();
-				
-		}
-	else if(check_seekcolor_pink_conditions()){
-				//seekcolor_pink();
-				
-		}
-	
-	else if(check_avoid_conditions()){
-		printf("avoid\n");
-		avoid();
-	}
-	
-	//else{straight_cruise();}
-	
+		
+		else{straight_cruise();
+			printf("cruising\n");}
+		
 	}
 //printf-Prints behavior the robot is currently executing
 return 0;
@@ -107,8 +115,8 @@ void escape(){
 
 /******************************************************/
 int check_seekcolor_blue_conditions(){
-	camera_open();
-	camera_update();
+	//camera_open();
+	//camera_update();
 	if (get_object_count(0) > 0){
 	printf("I see blue");
 	return true;
@@ -119,8 +127,8 @@ int check_seekcolor_blue_conditions(){
 }
 /******************************************************/
 int check_seekcolor_pink_conditions(){
-	camera_open();
-	camera_update();
+	//camera_open();
+	//camera_update();
 	if (get_object_count(1) > 0){
 	printf("I see pink");
 	return true;
@@ -130,9 +138,40 @@ int check_seekcolor_pink_conditions(){
 	
 }
 /******************************************************/
-void seekcolor(){
+void seekcolor_blue(){
+
+if(get_object_center(0,0).x<65) {// if object is on left...
+ drive(-0.5, 0.5, 0.1);// arc left
+	printf("Turning Left\n");
 }
+else { if(get_object_center(0,0).x>95) {// if object is on right...
+ drive(0.5, -0.5, 0.1);// arc right
+	printf("Turning Right\n");
+}
+else drive(-0.40, -0.40, 0.5);
+	printf("Driving Straight\n");}//go straight
+
+	
+}
+
 /******************************************************/
+/******************************************************/
+void seekcolor_pink(){
+	//camera_open();
+	//camera_update();
+if(get_object_center(1,0).x<65) {// if object is on left...
+ drive(-0.5, 0.5, 0.1);// arc left
+}
+else { if(get_object_center(1,0).x>95) {// if object is on right...
+ drive(0.5, -0.5, 0.1);// arc right
+}
+else drive(0.40, 0.40, 0.5);}//go straight
+	
+}
+	
+/******************************************************/
+
+
 
 int check_avoid_conditions(){
 	int left_ir_value;
@@ -150,6 +189,15 @@ int check_avoid_conditions(){
 
 /******************************************************/
 void pick_up(){
+	
+	
+	drive(0.0, 0.0, 0.5);
+	disable_servos();
+	enable_servo(GRIPPER_MOTOR);
+	set_servo_position(GRIPPER_MOTOR,800);
+	msleep(500);
+	disable_servo(GRIPPER_MOTOR);
+	enable_servos();
 }
 /******************************************************/
 void return_nest(){
@@ -174,7 +222,7 @@ void avoid(){
 /******************************************************/
 void straight_cruise(){
 	//drive(1.0, 1.0, 0.5);
-	drive(0.40, 0.40, 0.5);
+	drive(-0.40, -0.40, 0.5);
 }
 /******************************************************/
 void stop(){
