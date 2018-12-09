@@ -1,0 +1,292 @@
+#include "sensors.h"
+
+//Behavior primitive functions
+int check_escape_conditions();
+int check_avoid_conditions();
+//int check_approach_conditions();
+int check_seekcolor_blue_conditions();
+int check_seekcolor_pink_conditions();
+void seekcolor_blue();
+void seekcolor_pink();
+void escape();
+void avoid();
+void check_area_blue();
+//void approach();
+void straight_cruise();
+void pick_up();
+void return_nest();
+void stop();
+//Motor Control Function
+void drive(float left, float right, float delay_seconds);
+
+//*************************************************** Global Constant Declarations ****************************************************//
+const int FRONT_BUMP = 0;
+const int BACK_BUMP = 1;//15;
+const int LEFT_PHOTO = 2;
+const int RIGHT_PHOTO = 3;
+const int LEFT_IR = 4;
+const int RIGHT_IR = 5;
+const int LEFT_MOTOR = 0;
+const int RIGHT_MOTOR = 3;
+const int GRIPPER_MOTOR = 1;
+
+
+const int BLUE_CH = 0;
+const int PINK_CH = 1;
+const int GREEN_CH = 2;
+const int YELLOW_CH = 3;
+
+
+
+const float SERVO_MAX = 2047.0;
+const float TOP_SPEED = 1023.0;
+//int northPin = 2;
+//int southPin = 4;
+//int eastPin = 3;
+//int westPin = 5;
+//boolean northValue;
+//boolean southValue;
+//boolean eastValue;
+//boolean westValue;
+//int north;
+//int south;
+//int east;
+//int west;
+//100;
+//Boolean Constants
+//This dialect of C does not have boolean data types, so we're faking it
+//according to convention: true is non-zero, 	sually 1, and false is 0. 
+int const true = 1;
+int const false = 0;
+//*************************************************** Function Definitions ****************************************************//
+int main() {
+	
+int i;
+	enable_servos();
+	camera_open();
+	msleep(750);
+	
+		
+	while(1){ 
+		camera_update();
+		if(check_escape_conditions()){
+				escape();
+			}
+		else if(check_seekcolor_blue_conditions()){
+					seekcolor_blue();
+					check_area_blue();
+				
+					
+					
+			}
+		else if(check_seekcolor_pink_conditions()){
+					seekcolor_pink();
+					pick_up();
+					
+			}
+		
+		else if(check_avoid_conditions()){
+			printf("avoid\n");
+			avoid();
+		}
+		
+		else{straight_cruise();
+			printf("cruising\n");}
+		
+	}
+//printf-Prints behavior the robot is currently executing
+return 0;
+}
+/******************************************************/
+int check_escape_conditions(){
+	int bump_threshold = 0;
+	int bump_max = 400;
+	int front_bump_value = analog10(FRONT_BUMP);
+	
+	if(front_bump_value >= bump_threshold && front_bump_value <= bump_max){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/******************************************************/
+void escape(){
+	int bump_threshold = 250;
+	int bump_max = 400;
+	int front_bump_value = analog10(FRONT_BUMP);
+	//printf("EscapeFrontBump()\n");
+	if(front_bump_value < bump_threshold){
+		//drive(-0.25, 0.75, 0.50);
+		drive(-0.0, -0.90, 0.50);
+		//printf("drive(-0.25, -0.75, 1.5);\n");
+	}
+	else if(front_bump_value >= bump_threshold && front_bump_value <= bump_max){
+		//drive(0.75, -0.25, 0.50);
+		drive(-0.90, -0.0, 0.50);
+		//printf("drive(-0.75, -0.25, 1.5);\n");
+	}
+
+}
+
+/******************************************************/
+int check_seekcolor_blue_conditions(){
+	//camera_open();
+	//camera_update();
+	if (get_object_count(0) > 0){
+	printf("I see blue");
+	return true;
+	}else{
+		return false;
+		}
+	
+}
+/******************************************************/
+int check_seekcolor_pink_conditions(){
+	//camera_open();
+	//camera_update();
+	if (get_object_count(1) > 0){
+	printf("I see pink");
+	return true;
+	}else{
+		return false;
+		}
+	
+}
+/******************************************************/
+void seekcolor_blue(){
+	
+drive(0.0, 0.0, 0.25);
+if(get_object_center(0,0).x<65) {// if object is on left...
+ drive(-0.5, 0.5, 0.1);// arc left
+	printf("Turning Left\n");
+}
+else { if(get_object_center(0,0).x>95) {// if object is on right...
+ drive(0.5, -0.5, 0.1);// arc right
+	printf("Turning Right\n");
+}
+else drive(-0.40, -0.40, 0.5);
+	printf("Driving Straight\n");}//go straight
+
+	
+}
+
+/******************************************************/
+void check_area_blue(){
+	if(get_object_center(0,0).x>=55&&get_object_center(0,0).x<=60) && (get_object_center(0,0).y>=100||get_object_center(0,0).y<=105) {
+		drive(0.0, 0.0, 0.25);
+		printf("In position\n");
+		pick_up();
+	}
+	else {
+		printf("Not in position\n");
+		seekcolor_blue();
+	}
+		
+}
+/******************************************************/
+void seekcolor_pink(){
+	//camera_open();
+	//camera_update();
+if(get_object_center(1,0).x<65) {// if object is on left...
+ drive(-0.5, 0.5, 0.1);// arc left
+}
+else { if(get_object_center(1,0).x>95) {// if object is on right...
+ drive(0.5, -0.5, 0.1);// arc right
+}
+else drive(0.40, 0.40, 0.5);}//go straight
+	
+}
+	
+/******************************************************/
+
+
+
+int check_avoid_conditions(){
+	int left_ir_value;
+	int right_ir_value;
+	
+	left_ir_value = analog_et(LEFT_IR);
+	right_ir_value = analog_et(RIGHT_IR);
+	
+	if(left_ir_value > avoid_threshold || right_ir_value > avoid_threshold){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/******************************************************/
+void pick_up(){
+	printf("Picking Up\n");
+	
+	
+	drive(0.0, 0.0, 0.5);
+	disable_servos();
+	enable_servo(GRIPPER_MOTOR);
+	set_servo_position(GRIPPER_MOTOR,800);
+	msleep(500);
+	disable_servo(GRIPPER_MOTOR);
+	enable_servos();
+}
+/******************************************************/
+/******************************************************/
+void put_down(){
+	printf("Dropping\n");
+	
+	
+	drive(0.0, 0.0, 0.5);
+	disable_servos();
+	enable_servo(GRIPPER_MOTOR);
+	set_servo_position(GRIPPER_MOTOR,0);
+	msleep(500);
+	disable_servo(GRIPPER_MOTOR);
+	enable_servos();
+}
+/******************************************************/
+void return_nest(){
+}
+/******************************************************/
+void avoid(){
+	int left_ir_value;
+	int right_ir_value;
+	
+	left_ir_value = analog_et(LEFT_IR);
+	right_ir_value = analog_et(RIGHT_IR);
+	
+	if(left_ir_value > avoid_threshold){
+		drive(0.5, -0.5, 0.1);
+	}
+	
+	else if(right_ir_value > avoid_threshold){
+		drive(-0.5, 0.5, 0.1);
+	}
+}
+
+/******************************************************/
+void straight_cruise(){
+	//drive(1.0, 1.0, 0.5);
+	drive(-0.40, -0.40, 0.5);
+}
+/******************************************************/
+void stop(){
+	drive(0.0, 0.0, 0.25);
+}
+/******************************************************/
+void drive(float left, float right, float delay_seconds){
+	float left_speed;
+	float right_speed;
+	
+	delay_seconds *= 1000;
+	//printf("left = %f, right = %f, TOP_SPEED = %f\n", left, right, TOP_SPEED);
+	
+	right_speed = TOP_SPEED - (right * TOP_SPEED);
+	left_speed  = TOP_SPEED + (left * TOP_SPEED);
+	
+	//printf("left_speed = %f, right_speed = %f\n", left_speed, right_speed);	
+	set_servo_position(LEFT_MOTOR, left_speed);
+	set_servo_position(RIGHT_MOTOR, right_speed);
+	msleep(delay_seconds);
+	//disable_servos();
+}
+/******************************************************/
